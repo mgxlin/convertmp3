@@ -1,0 +1,39 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: mgxlin-audio
+  profiles:
+    active: test
+server:
+  port: 8989
+  shutdown: graceful
+
+version: mgxlin
+
+--- #################### 注册中心相关配置 ####################
+spring:
+  cloud:
+    nacos:
+      server-addr: nacos.basic:${NACOS_PORT:8848}
+      discovery:
+        namespace: ${spring.profiles.active}
+        metadata:
+          version: ${REG_VERSION:${version}}
+        group: VMS
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
+
+--- #################### 配置中心相关配置 ####################
+
+spring:
+  cloud:
+    nacos:
+      config:
+        name: cipher-aes-${spring.application.name}
+        server-addr: nacos.basic:${NACOS_PORT:8848}
+        group: VMS
+        file-extension: yaml
+        namespace: ${spring.profiles.active}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
